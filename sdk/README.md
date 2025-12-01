@@ -281,44 +281,6 @@ ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 defer cancel()
 ```
 
-## 测试与覆盖率
 
-- 基础测试：`sdk/client/client_test.go`（分支/流水线）
-- 运行：
-  - `go build ./...`
-  - `go vet ./...`
-  - `go test ./... -v`
-- 覆盖率：
-  - `go test ./sdk/... -cover -coverpkg=./sdk/... -coverprofile=coverage.out`
-  - `go tool cover -func coverage.out`
 
-## 安全与配置
 
-- 凭据：通过环境变量注入，不要硬编码；勿提交到仓库。
-- TLS：当前 Provider 默认跳过证书验证以便本地测试（自签场景）；生产建议使用严格 TLS，并在后续版本提供可注入 `http.Client` 的选项。
-
-## 扩展指南（新增 Provider）
-
-- 实现 `sdk/provider/provider.go:8` 的全部方法。
-- 在 `sdk/client` 内提供对应 `NewXXXClient` 快速构造。
-- 统一类型映射到 `sdk/types`，避免直接暴露第三方类型。
-
-## 发布到 GitHub
-
-- 独立仓库（推荐）：
-  - 新建仓库并迁移 `sdk/` 源码，`go.mod` 设置为 `module github.com/<yourname>/webci-sdk`
-  - 验证：`go build ./... && go vet ./... && go test ./... -v`
-  - 推送：`git init && git remote add origin git@github.com:<yourname>/webci-sdk.git && git add -A && git commit -m "feat(sdk): initial release" && git push -u origin main`
-  - 发版：`git tag v0.1.0 && git push origin v0.1.0`
-- 当前仓库内使用：直接按 `webci-refactored/sdk/...` 路径引用；对外发布时建议独立仓库，避免模块名与导入路径不一致。
-
-## 版本策略
-
-- 采用语义化版本（SemVer）：`MAJOR.MINOR.PATCH`
-- 避免在公共接口引入破坏性变更；新增字段/方法保持向后兼容。
-
-## Roadmap
-
-- 提供可注入的 `http.Client` 配置（TLS、超时、代理）。
-- 新增 Provider（GitHub/Bitbucket）。
-- 增强 MR 轮询与错误语义（可选辅助函数）。
