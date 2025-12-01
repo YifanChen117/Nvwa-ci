@@ -39,7 +39,7 @@
 环境变量（示例）：
 
 ```
-GITLAB_BASE_URL="gitlab.oscd"
+GITLAB_BASE_URL="<your_gitlab_base_url>"
 GITLAB_TOKEN=<your_token>
 GITLAB_PROJECT_ID=group/project   # 或项目数字 ID
 ```
